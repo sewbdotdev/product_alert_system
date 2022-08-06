@@ -4,4 +4,5 @@ COPY package*.json ./
 COPY ./src/prisma/schema.prisma ./src/prisma/schema.prisma
 RUN npm install
 COPY . .
-CMD ["npm", "run", "dev"]
+RUN chmod u+x ./wait.sh
+CMD ["./wait.sh"]

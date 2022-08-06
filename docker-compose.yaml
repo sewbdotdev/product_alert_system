@@ -62,7 +62,9 @@ services:
     env_file:
       - .env
     volumes:
-      - ./ss/src:/usr/app/src
+      - ./ss/src:/app/src
+    networks:
+      - product_alert_system_default
 
 networks:
   product_alert_system_default:
