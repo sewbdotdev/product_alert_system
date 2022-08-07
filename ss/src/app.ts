@@ -2,8 +2,15 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { db, cache } from "./utils/persistence";
 import bodyParser from "body-parser";
+import fetch from "node-fetch";
 
 dotenv.config();
+
+type ProductResponseFromDS = {
+  name: string;
+  price: number;
+  id: number;
+};
 
 const app: Express = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -179,6 +186,57 @@ app.get(
   }
 );
 
+// Get all products by data source
+app.get(
+  "/ds/products",
+  async (
+    req: Request<{ userId: number }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const products = await db.product.findMany();
+
+      return res.send(products);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Get all products by users
+app.get(
+  "/products",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      //   TODO: change to url of the data source.
+      const request = await fetch(
+        `http://ss:${process.env.SS_PORT}/ds/products/`
+      );
+
+      if (request.status !== 200) {
+        throw new Error("Unable to retrieve products now. Please try again.");
+      }
+
+      const response = (await request.json()) as ProductResponseFromDS[];
+
+      for (const prod of response) {
+        await db.product.update({
+          where: {
+            id: prod.id,
+          },
+          data: {
+            price: prod.price,
+          },
+        });
+      }
+
+      res.send(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.json({
