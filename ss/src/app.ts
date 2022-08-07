@@ -26,7 +26,7 @@ app.post(
       const body = req.body;
       const { email, fullName } = body;
       if (!email || !fullName) {
-        throw new Error("Email and name are required fields.");
+        throw new Error("Email and fullName are required fields.");
       }
 
       const doesEmailExist = await db.user.findFirst({
@@ -64,7 +64,7 @@ app.post(
       {},
       {},
       {
-        product: string;
+        productId: number;
         price: number;
         threshold: "ABOVE" | "BELOW";
         userId: number;
@@ -75,11 +75,11 @@ app.post(
   ) => {
     try {
       const body = req.body;
-      const { threshold, product, price, userId } = body;
+      const { threshold, productId, price, userId } = body;
 
-      if (!threshold || !product || !price || !userId) {
+      if (!threshold || !productId || !price || !userId) {
         throw new Error(
-          "threshold, product, price and userId are all required parameters."
+          "threshold, productId, price and userId are all required parameters."
         );
       }
 
@@ -92,16 +92,30 @@ app.post(
       if (!doesUserExist) {
         throw new Error("This user doesn't exist.");
       }
+      const doesProductExist = await db.product.findFirst({
+        where: {
+          id: productId,
+        },
+      });
+
+      if (!doesProductExist) {
+        throw new Error("This product doesn't exist.");
+      }
+
       await cache.set(String(doesUserExist.id), JSON.stringify(doesUserExist));
 
       const createNotification = await db.userNotification.create({
         data: {
           price,
-          productName: product,
           type: threshold,
           user: {
             connect: {
               id: userId,
+            },
+          },
+          products: {
+            connect: {
+              id: productId,
             },
           },
         },
@@ -113,8 +127,10 @@ app.post(
         );
       }
 
-      const alertCacheKey = `${product}:${threshold === "ABOVE" ? 1 : -1}`;
-      const subscribedUsersCacheKey = `${product}:${
+      const alertCacheKey = `${doesProductExist.name}:${
+        threshold === "ABOVE" ? 1 : -1
+      }`;
+      const subscribedUsersCacheKey = `${doesProductExist.name}:${
         threshold === "ABOVE" ? 1 : -1
       }:${price}`;
       await cache.zAdd(alertCacheKey, [{ value: String(price), score: price }]);
@@ -162,6 +178,8 @@ app.get(
     }
   }
 );
+
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.json({
     errors: {
