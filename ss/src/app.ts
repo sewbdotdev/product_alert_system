@@ -211,7 +211,7 @@ app.get(
     try {
       //   TODO: change to url of the data source.
       const request = await fetch(
-        `http://ss:${process.env.SS_PORT}/ds/products/`
+        `http://${process.env.DS_HOST}:${process.env.DS_PORT}/ds/products/`
       );
 
       if (request.status !== 200) {

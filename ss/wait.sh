@@ -23,6 +23,11 @@ while true; do
     sleep 1
 done
 
+echo "=== Resetting Database"
+npm run db:reset
+Result=$?
+echo $Result
+
 echo "===== Starting the application ======"
 npm run dev
 
