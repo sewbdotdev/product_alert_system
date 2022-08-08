@@ -1,26 +1,47 @@
 import eventDispatcher, { EventSubscriber, On } from 'event-dispatch';
 import events from './events';
-import { alertKeysList, User, Users } from '../types';
+import { IUser } from '../types';
 import Container from 'typedi';
 import { RedisClientType } from '@redis/client';
+import MailerService from '../services/mailer';
 
 @EventSubscriber()
 export default class AlertSubscribers {
 
   @On(events.alert.sendAlerts)
-  public async onSendAlerts({ alertKeys } : { alertKeys : alertKeysList }) {
-    const cache: RedisClientType = Container.get("cacheConnection")
+  public async onSendAlerts({ alertKeys } : { alertKeys : string[] }) {
 
-    for (const alertKey of alertKeys) {
-      const users: User[] = await cache.lRange(alertKey, 0, -1)
-      eventDispatcher.dispatch(events.alert.sendUserNotification, { users } )
+    try {
+      const cache: RedisClientType = Container.get("cacheConnection")
 
+      for (const alertKey of alertKeys) {
+        const users = await cache.SMEMBERS(alertKey)
+        if (!users.length) {
+          console.error(`🛡️[as-server]: Alertkey ${alertKey} not found in data store`)
+          return
+        }
+        eventDispatcher.dispatch(events.alert.sendUserNotification, { users, alertKey } )
+      }
+    } catch (error) {
+      console.error(`🛡️[as-server]: 🔥 Error on event ${events.alert.sendAlerts}: %o`, error);
+      throw error;
     }
-  }
+    }
+    
 
   @On(events.alert.sendUserNotification)
-  public async onSendUserNotification(users: User[]) {
-    
+  public async onSendUserNotification({ users, alertKey }: {users: string[], alertKey: string}) {
+    try {
+      const mailerInstance = Container.get(MailerService)
+      for (const user of users){
+        const userObject: IUser = JSON.parse(user)
+        await mailerInstance.sendAlert(userObject, alertKey)
+      }
+    } catch (error) {
+      console.error(`🛡️[as-server]: 🔥 Error on event ${events.alert.sendUserNotification}: %o`, error);
+      throw Error(error);
+    }
+
   }
 
 }

@@ -1,23 +1,16 @@
-export type alertKeysList = string[]
-
-export type Alert = {
-  product: string
-  type: string
-  value: number
+export type IAlertKeys =  {
+  alertKeys: string[]
 }
 
-export type Notification = {
-  alert: Alert,
-  name: string,
-  email: string
-}
-
-export type User = string
-
-export type Users = {
+export interface IUser  {
   id: string,
   fullName: string,
-  email: string,
+  email: string
   createdAt: Date,
   updatedAt: Date
+}
+
+export interface IEmail {
+  subject: string,
+  body: string
 }

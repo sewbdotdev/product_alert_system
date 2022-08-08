@@ -1,4 +1,4 @@
-import { createClient, RedisClientType } from "redis"
+import { createClient } from "redis"
 import config from "../config"
 
 const url = `redis://@${config.cache_host}:${config.cache_port}`;

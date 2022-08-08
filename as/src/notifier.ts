@@ -1,1 +1,0 @@
-// receives alert, queries cache with keys, and gets user email
