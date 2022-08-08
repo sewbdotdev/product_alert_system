@@ -1,5 +1,5 @@
 version: "3"
-    
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
@@ -16,8 +16,8 @@ services:
     image: confluentinc/cp-kafka:7.0.1
     container_name: broker
     ports:
-    # To learn about configuring Kafka for access across networks see
-    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      # To learn about configuring Kafka for access across networks see
+      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
       - "9092:9092"
     depends_on:
       - zookeeper
@@ -26,7 +26,7 @@ services:
       .env
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -43,10 +43,10 @@ services:
     env_file:
       .env
     environment:
-        MYSQL_ROOT_PASSWORD: password
-        MYSQL_DATABASE: pas
-        MYSQL_USER: pas
-        MYSQL_PASSWORD: pas
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pas
+      MYSQL_USER: pas
+      MYSQL_PASSWORD: pas
     volumes:
       - ./db/:/var/lib/mysql
     networks:
@@ -60,7 +60,20 @@ services:
       - "6379:6379"
     networks:
       - product_alert_system_default
-  
+  ss:
+    build:
+      context: ./ss
+      dockerfile: Dockerfile.dev
+    container_name: ss
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./ss/src:/app/src
+    networks:
+      - product_alert_system_default
+
 networks:
   product_alert_system_default:
     driver: bridge
