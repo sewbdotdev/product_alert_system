@@ -34,3 +34,6 @@
 **/**/redis/
 **/**/.DS_Store
 **/**/build/*
+**/**/dist
+.env
+**/*.log

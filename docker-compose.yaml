@@ -4,6 +4,8 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
+    env_file:
+      .env
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -19,6 +21,9 @@ services:
       - "9092:9092"
     depends_on:
       - zookeeper
+    
+    env_file:
+      .env
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
@@ -34,6 +39,9 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     container_name: db
+    
+    env_file:
+      .env
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: pas
@@ -63,6 +71,20 @@ services:
       - .env
     volumes:
       - ./ss/src:/app/src
+    networks:
+      - product_alert_system_default
+  
+  as:
+    build:
+      context: ./as
+      dockerfile: Dockerfile.dev
+    container_name: as
+    ports:
+      - "4444:4444"
+    env_file:
+      - .env
+    volumes:
+      - ./as/src:/app/src
     networks:
       - product_alert_system_default
 
