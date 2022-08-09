@@ -1,6 +1,6 @@
 export default {
 
-  port: parseInt(process.env.AS_PORT, 10),
+  port: parseInt(process.env.AS_PORT || "4444"),
 
   cache_host: process.env.CACHE_HOST,
   cache_port: parseInt(process.env.CACHE_PORT),

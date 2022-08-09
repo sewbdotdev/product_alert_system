@@ -3,9 +3,6 @@ import { IAlertKeys } from './types'
 import AlertService from './services/alert';
 import Container from 'typedi';
 
-// type HelloBuilder = (name: string) => HelloResponse;
-
-
 export const rootHandler = (_req: Request, res: Response) => {
   return res.send('API is working 🤓');
 };

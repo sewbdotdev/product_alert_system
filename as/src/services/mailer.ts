@@ -18,7 +18,7 @@ export default class MailerService {
       }
       await this.defaultEmailClient.sendMail(user.email, email)
     } catch (error) {
-      throw error(`Unable to send notification email ${user.fullName}:${alertKey}`)
+      throw Error(`Unable to send notification email ${user.fullName}:${alertKey}`)
     }
     
   }
