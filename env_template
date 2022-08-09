@@ -25,4 +25,9 @@ SS_PORT
 PRODUCT_COUNT
 DS_HOST
 DS_PORT
+
+# Standardization Service
+SS_PORT
+
+# Alert Service
 AS_PORT
