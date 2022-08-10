@@ -2,36 +2,36 @@ version: "3"
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
+    image: "bitnami/zookeeper:3.7.0"
     container_name: zookeeper
-    env_file:
-      .env
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    env_file: .env
     networks:
       - product_alert_system_default
 
-  broker:
-    image: confluentinc/cp-kafka:7.0.1
-    container_name: broker
+  kafka:
+    image: "bitnami/kafka:2.8.0"
+    container_name: kafka
     ports:
-      # To learn about configuring Kafka for access across networks see
-      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
-      - "9092:9092"
+      - "9093:9093"
+    expose:
+      - "9093"
+    env_file:
+      - .env
     depends_on:
       - zookeeper
-    
+    networks:
+      - product_alert_system_default
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    ports:
+      - "9000:9000"
     env_file:
-      .env
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      - .env
+    depends_on:
+      - kafka
     networks:
       - product_alert_system_default
   db:
@@ -39,14 +39,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     container_name: db
-    
-    env_file:
-      .env
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: pas
-      MYSQL_USER: pas
-      MYSQL_PASSWORD: pas
+
+    env_file: .env
     volumes:
       - ./db/:/var/lib/mysql
     networks:
@@ -73,7 +67,7 @@ services:
       - ./ss/src:/app/src
     networks:
       - product_alert_system_default
-  
+
   as:
     build:
       context: ./as
