@@ -81,6 +81,22 @@ services:
       - ./as/src:/app/src
     networks:
       - product_alert_system_default
+  ds:
+    build:
+      context: ./ds
+      dockerfile: Dockerfile
+    container_name: ds
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    volumes:
+      - "./ds/:/app/"
+    networks:
+      - product_alert_system_default
+    depends_on:
+      - kafka
+      - ss
 
 networks:
   product_alert_system_default:
