@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import { db, cache } from "./utils/persistence";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
-
 dotenv.config();
 
 type ProductResponseFromDS = {
@@ -211,7 +210,7 @@ app.get(
     try {
       //   TODO: change to url of the data source.
       const request = await fetch(
-        `http://${process.env.DS_HOST}:${process.env.DS_PORT}/ds/products/`
+        `http://${process.env.DS_HOST}:${process.env.DS_PORT}/products`
       );
 
       if (request.status !== 200) {
@@ -220,19 +219,20 @@ app.get(
 
       const response = (await request.json()) as ProductResponseFromDS[];
 
-      for (const prod of response) {
-        await db.product.update({
-          where: {
-            id: prod.id,
-          },
-          data: {
-            price: prod.price,
-          },
-        });
-      }
-
+      // for (const prod of response) {
+      //   await db.product.update({
+      //     where: {
+      //       id: prod.id,
+      //     },
+      //     data: {
+      //       price: prod.price,
+      //     },
+      //   });
+      // }
+      console.log(request);
       res.send(response);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   }
