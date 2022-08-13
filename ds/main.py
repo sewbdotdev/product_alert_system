@@ -88,7 +88,7 @@ async def produce():
                 else:
                     if v[0] - price_change >= 0:
                         product_to_price[k] = (v[0] - price_change, v[1])
-                temp[k] = v[0]
+                temp[k] = product_to_price[k]
             print(f"Producing events")
             value_json = json.dumps(temp).encode("utf-8")
             await producer.send_and_wait(topic=config['KAFKA_TOPIC'], value=value_json)
