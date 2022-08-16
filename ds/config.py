@@ -9,6 +9,6 @@ config = {
     'loop': asyncio.get_event_loop(),
     "KAFKA_BOOTSTRAP_SERVERS": getenv('KAFKA_BOOTSTRAP_SERVERS', "localhost:9092"),
     "MAX_PRICE_CHANGE": getenv('MAX_PRICE_CHANGE', 50),
-    "EVENT_GENERATION_INTERVAL": getenv('EVENT_GENERATION_INTERVAL', 60)
+    "EVENT_GENERATION_INTERVAL": getenv('EVENT_GENERATION_INTERVAL', 1)
 }
 
