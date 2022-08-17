@@ -2,7 +2,7 @@
 
 This service is responsible for sending notification alerts to users. It -
 
-- receives a list of `stock:type:threshold` keys from the [Calculator Service]()
+- receives a list of alert keys (`product:type:threshold`) from the [Calculator Service](https://github.com/sewbdotdev/product_alert_system/tree/main/cs)
 - gets the profiles of users subscribed to each event from the Cache
 - sends an email notification to each subscribed user
 
@@ -52,4 +52,4 @@ For local development,
 ## API Documentation
 
 Documentation of the Alert Service can be found under the Product Alert System.
-https://www.getpostman.com/collections/32148019113dc8f6a6b6
+https://www.getpostman.com/collections/497d17d238d9d8440470

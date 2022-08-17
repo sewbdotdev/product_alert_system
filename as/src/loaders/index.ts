@@ -1,5 +1,5 @@
 import express from "express";
-import dependencyInjectorLoader from './dependencyInjector';
+import dependencyInjectorLoader from './dependencyinjector';
 import { cacheConnection } from './cache';
 import './events';
 

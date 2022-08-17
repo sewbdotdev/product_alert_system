@@ -98,6 +98,24 @@ services:
       - kafka
       - ss
 
+  cs:
+    build:
+      context: ./cs
+      dockerfile: Dockerfile
+    container_name: cs
+    ports:
+      - "7777:7777"
+    env_file:
+      - .env
+    volumes:
+      - "./cs/:/app/"
+    networks:
+      - product_alert_system_default
+    depends_on:
+      - kafka
+      - ds
+      - cache
+
 networks:
   product_alert_system_default:
     driver: bridge
