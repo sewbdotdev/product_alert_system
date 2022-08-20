@@ -2,6 +2,12 @@
 This is a system that simulates users receiving notification on prices of products. The users create notifications about product prices and receives alerts when the state of the prices reaches the notification specification.
 It is a microservice application that makes use of both internal HTTP calls and event driven communication to faciliate the satisfaction of the user's requirements.
 An article that addressed the design of the system can be found [here](https://sewb.dev/posts/product-alert-system-9b4zuuz).
+
+
+## API Documentation
+[Postman Collection](https://www.getpostman.com/collections/d58a1e3756154d3a01d8)
+
+
 ## Architecture
 ![System Design: Product Alert System on sewb.dev](https://res.cloudinary.com/sewb/image/upload/v1660292211/High_Level_Design_of_Product_Alert_System_299cfcb7cc.png)
 ## Services
@@ -31,7 +37,7 @@ For notifications, we are not explicitly sending an emails to the users; instead
 ![Logs of all services](/img/Logs%20of%20all%20services.png)
 - To stop the application, run docker-compose down
 ## How to test
-You'd need an API client like [Postman](https://www.postman.com/) to conveniently test the application. You can checkout the postman collection [documentation](https://www.getpostman.com/collections/497d17d238d9d8440470) for reference, but here's a short walkthrough of how to create alerts;
+You'd need an API client like [Postman](https://www.postman.com/) to conveniently test the application. You can checkout the postman collection [documentation](https://www.getpostman.com/collections/d58a1e3756154d3a01d8) for reference, but here's a short walkthrough of how to create alerts;
 *Please note that base_url referenced below is simply where your application is running on your machine. By defaultm it's http://localhost/3000 but you can change the port in the env file as you see fit.*
 - First, create a user by making a POST request with the body below to base_url/auth. This create a user with an id of 1 as seen in the response
   json

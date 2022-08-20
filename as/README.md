@@ -48,8 +48,3 @@ For local development,
 - at the root of the entire product alert system, run `docker-compose up` to start the entire application.
 - this would install the necessary packages, starting the cache and then the application
 - by default the Alert Service is exposed on port `4444` so you'd find it running on http://localhost:4444
-
-## API Documentation
-
-Documentation of the Alert Service can be found under the Product Alert System.
-https://www.getpostman.com/collections/497d17d238d9d8440470

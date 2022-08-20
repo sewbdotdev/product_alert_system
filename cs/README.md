@@ -36,4 +36,4 @@ For local development,
 
 ## API Documentation
 
-The Calculator Service doesn't expose any endpoint as it simply consumes events, retrieves cached data, and makes internal POST requests. You can find the documentation for the entire project here: https://www.getpostman.com/collections/497d17d238d9d8440470
+The Calculator Service doesn't expose any endpoint as it simply consumes events, retrieves cached data, and makes internal POST requests. 

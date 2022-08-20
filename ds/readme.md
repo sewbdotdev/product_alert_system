@@ -24,9 +24,6 @@ It also contains one single endpoint /products that returns the current price of
 
 For local development, at the root of the entire product alert system, run `docker-compose up` to start the entire application. This would handle installing the necessary packages, starting the database and cache and then starting the application.
 
-## API Documentation
-
-https://www.getpostman.com/collections/497d17d238d9d8440470
 
 ## NOTE
 

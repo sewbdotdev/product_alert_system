@@ -29,7 +29,3 @@ To keep the server minimal as possible, it doesn't have any authentication or au
 
 For local development, at the root of the entire product alert system, run `docker-compose up` to start the entire application. This would handle installing the necessary packages, starting the database and cache and then starting the application.
 
-## API Documentation
-
-Documentation of the standardisation service can be found under the Product Alert System.
-https://www.getpostman.com/collections/497d17d238d9d8440470
