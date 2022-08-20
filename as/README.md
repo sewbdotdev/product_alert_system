@@ -32,11 +32,11 @@ This service is responsible for sending notification alerts to users. It -
 
 The Alert Service uses [Nodemailer](https://nodemailer.com/about/) as the default email client. In order to provide a *complete* out-of-the-box experience that requires minimal user interaction with the code when they run this project, an [ephemeral email](https://ethereal.email) config was used. With this config, although alerts will be sent, you won't receive them in your email inbox. Rather, they're intercepted and available for preview at a URL that is logged to the console as seen in the image below;
 
-![Notification Alert Email Preview URL](img/Alert%20Service%20Email%20Preview%20URL.png)
+![Notification Alert Email Preview URL](../img/Alert%20Service%20Email%20Preview%20URL.png)
 
 You can preview the email through URL as seen below;
 
-![Notification Alert Email Preview](img/Alert%20Service%20Email%20Preview.png)
+![Notification Alert Email Preview](../img/Alert%20Service%20Email%20Preview.png)
 
 *If you'd like to really receive alerts in your email (say in a production instance), you'd need to setup a mail client (say [Mailgun](https://documentation.mailgun.com/en/latest/index.html), [Sendgrid](https://docs.sendgrid.com/for-developers/sending-email/quickstart-nodejs), etc.) in `src/loaders/emailClient`.*
 
