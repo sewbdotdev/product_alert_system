@@ -19,7 +19,13 @@ The Product Alert System comprises of four services,
 For a detailed description of these services, checkout out this blog post on [Product Alert System](https://sewb.dev/posts/product-alert-system-9b4zuuz) as well as each service's README file.
 ## Design considerations
 ### How notifications created are stored
-When a notification is created by the user, the standardisation service creates a composite cache key to aggregate all prices set by users per product. This composite key has the format `<product_name>:<threshold>`. The value this key holds is a sorted set of all prices set by users in the system. We map `ABOVE` threshold to `1` and `BELOW` threshold to `-1`. For example, if a user creates a notification for when the price of Bag falls below `199`, the standardisation service creates a cache entry of `Bag:-1`-> `[{score:199, value: 199}]`. If another notification is created for when the price of Bag fall below 150, the cache entry is updated to `Bag:-1` -> `[{score:150, value: 150},{score:199, value: 199}]`. We make use of [Redis](https://redis.io/) as our caching service and leverage the Sorted Set data structure to achieve this.
+When a notification is created by the user, the standardisation service creates a composite cache key to aggregate all prices set by users per product. This composite key has the format `<product_name>:<threshold>`. The value this key holds is a sorted set of all prices set by users in the system. We map `ABOVE` threshold to `1` and `BELOW` threshold to `-1`. 
+
+For example, if a user creates a notification for when the price of Bag falls below `199`, the standardisation service creates a cache entry of `Bag:-1`-> `[{score:199, value: 199}]`. If another notification is created for when the price of Bag fall below 150, the cache entry is updated to `Bag:-1` -> `[{score:150, value: 150},{score:199, value: 199}]`.
+
+ We make use of [Redis](https://redis.io/) as our caching service and leverage the Sorted Set data structure to achieve this.
+
+ 
 ### How we minimize network requests to the database
 To minimize network calls to the database, the standardisation service also creates a cache entry of `<product_name>:<threshold>:<price>` as key to a set of user details, i.e. `{user1_details, user2_details}` as values. This aggregates the details (e.g. name, email address) of all users who want to be notified when a price change occurs. Since multiple users may create the same notifications (the same product, price and threshold combination), it's convenient to store those user details in a single location. This can then be used by the alert service to retrieve user details and notify them.
 ### How we handle sending notifications
